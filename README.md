@@ -243,8 +243,6 @@ sequence. The recommended order is:
 
 [![Buy Me A Coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/wildtang3nt)
 
----
-
 ## License
 
 Licensed under the [GNU General Public License v3.0](LICENSE).
