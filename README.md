@@ -28,18 +28,18 @@ This project bridges the two systems so they cooperate:
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│                 Anycubic ACE Pro                     │
+│                 Anycubic ACE Pro                    │
 │  [Slot 0] [Slot 1] [Slot 2] [Slot 3]                │
 │   Dry @ 55°C  ·  RFID detect  ·  USB serial         │
 └────────┬────────────┬───────────────────────────────┘
          │            │          (650mm Bowden each)
          ▼            ▼
-┌────────────────────────────────────────────────────┐
+┌─────────────────────────────────────────────────────┐
 │              Snapmaker U1 Back Panel                │
 │   Left feed module        Right feed module         │
 │   (e0 + e1)               (e2 + e3)                 │
-│   preload: ~950mm         preload: ~950mm            │
-└──────┬──────┬──────────────┬──────┬────────────────┘
+│   preload: ~950mm         preload: ~950mm           │
+└──────┬──────┬──────────────┬──────┬─────────────────┘
        │      │              │      │
        ▼      ▼              ▼      ▼
       [T0]  [T1]           [T2]  [T3]
@@ -69,20 +69,20 @@ in protocol integration. See [DESIGN.md](DESIGN.md) for full mode analysis.
 ```
 ┌─────────────────────┐     Unix socket      ┌─────────────────────┐
 │   Klipper (u1)      │◄────────────────────►│  Klipper Router     │
-│                     │                       │  klipper_router.py  │
+│                     │                      │  klipper_router.py  │
 │  - 4x extruders     │     Unix socket      │                     │
 │  - SnapSwap macros  │◄────────────────────►│  JSON-RPC bridge    │
-│  - filament_feed    │                       │                     │
-│  - AFC lanes        │                       └──────────┬──────────┘
-│  - router_api.cfg   │                                  │ Unix socket
-└─────────────────────┘                       ┌──────────▼──────────┐
-                                              │   Klipper (ace)     │
-                                              │                     │
-                                              │  - ace.py extra     │
-                                              │  - filament sensors │
-                                              │  - dryer control    │
-                                              │  - router_api.cfg   │
-                                              └─────────────────────┘
+│  - filament_feed    │                      │                     │
+│  - AFC lanes        │                      └──────────┬──────────┘
+│  - router_api.cfg   │                                 │ Unix socket
+└─────────────────────┘                      ┌──────────▼──────────┐
+                                             │   Klipper (ace)     │
+                                             │                     │
+                                             │  - ace.py extra     │
+                                             │  - filament sensors │
+                                             │  - dryer control    │
+                                             │  - router_api.cfg   │
+                                             └─────────────────────┘
 ```
 
 ### Key Design Decisions
