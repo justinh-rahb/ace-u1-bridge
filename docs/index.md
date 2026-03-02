@@ -179,3 +179,9 @@ See [Commissioning](COMMISSIONING.md) for the full phase-by-phase bring-up seque
 | [Kobra-S1/ACEPRO](https://github.com/Kobra-S1/ACEPRO) | ACE Pro Klipper driver |
 | [ANYCUBIC-3D/klipper-go](https://github.com/ANYCUBIC-3D/klipper-go) | Reference: ACE protocol internals |
 | [jbatonnet/Rinkhals](https://github.com/jbatonnet/Rinkhals) | Reference: community CFW for Kobra 3 V2 |
+
+---
+
+[![Buy Me A Coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/wildtang3nt)
+
+Licensed under the [GNU General Public License v3.0](https://github.com/justinh-rahb/ace-u1-bridge/blob/main/LICENSE).

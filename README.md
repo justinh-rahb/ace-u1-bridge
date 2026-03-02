@@ -238,3 +238,13 @@ sequence. The recommended order is:
 7. Test manual load/unload event flow
 8. Dial in Bowden path length constants (record in [docs/BOWDEN_ROUTING.md](docs/BOWDEN_ROUTING.md))
 9. Optionally install systemd services: `./scripts/install.sh --services`
+
+---
+
+[![Buy Me A Coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/wildtang3nt)
+
+---
+
+## License
+
+Licensed under the [GNU General Public License v3.0](LICENSE).
