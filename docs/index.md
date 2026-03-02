@@ -86,7 +86,7 @@ live prints and breaks with OTA updates. A separate minimal Klipper process keep
 domains isolated — if the ACE instance crashes, the U1 keeps printing.
 
 **Why Klipper Router?**
-[Klipper Router](https://github.com/justinh-rahb/klipper-router) is a small async Python
+[Klipper Router](https://github.com/paxx12/klipper-router) is a small async Python
 bridge that connects multiple Klipper instances over Unix sockets. It handles reconnection,
 ready-state tracking, and async event delivery via `router/event/trigger` —
 exactly what's needed for the load/unload handoff.
@@ -175,7 +175,7 @@ See [Commissioning](COMMISSIONING.md) for the full phase-by-phase bring-up seque
 
 | Repo | Role |
 |------|------|
-| [justinh-rahb/klipper-router](https://github.com/justinh-rahb/klipper-router) | JSON-RPC bridge daemon |
+| [paxx12/klipper-router](https://github.com/paxx12/klipper-router) | JSON-RPC bridge daemon |
 | [Kobra-S1/ACEPRO](https://github.com/Kobra-S1/ACEPRO) | ACE Pro Klipper driver |
 | [ANYCUBIC-3D/klipper-go](https://github.com/ANYCUBIC-3D/klipper-go) | Reference: ACE protocol internals |
 | [jbatonnet/Rinkhals](https://github.com/jbatonnet/Rinkhals) | Reference: community CFW for Kobra 3 V2 |

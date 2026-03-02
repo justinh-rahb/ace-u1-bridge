@@ -182,7 +182,7 @@ ace-u1-bridge/
 │   ├── BOWDEN_ROUTING.md       # physical routing notes, path length measurements
 │   └── COMMISSIONING.md        # step-by-step bring-up guide
 └── upstream/                   # git submodules (read-only)
-    ├── klipper-router          # github.com/justinh-rahb/klipper-router
+    ├── klipper-router          # github.com/paxx12/klipper-router
     └── ACEPRO                  # github.com/Kobra-S1/ACEPRO
 ```
 
@@ -190,7 +190,7 @@ ace-u1-bridge/
 
 | Repo | Role |
 |------|------|
-| [justinh-rahb/klipper-router](https://github.com/justinh-rahb/klipper-router) | JSON-RPC bridge daemon |
+| [paxx12/klipper-router](https://github.com/paxx12/klipper-router) | JSON-RPC bridge daemon |
 | [Kobra-S1/ACEPRO](https://github.com/Kobra-S1/ACEPRO) | ACE Pro Klipper driver (`ace.py`) |
 | [ANYCUBIC-3D/klipper-go](https://github.com/ANYCUBIC-3D/klipper-go) | Reference: Anycubic's own Golang Klipper port |
 | [jbatonnet/Rinkhals](https://github.com/jbatonnet/Rinkhals) | Reference: community CFW for Kobra 3 V2 |
