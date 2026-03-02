@@ -48,16 +48,21 @@ This project bridges the two systems so they cooperate:
 
 ### Deployment Options
 
-Three integration modes, in order of increasing complexity:
+Integration modes, in order of increasing complexity:
 
-| Mode | Description | ACE protocol needed |
-|------|-------------|-------------------|
-| **Dumb drybox** | ACE feeds directly into U1 entry points, no switching | No |
-| **Lane-per-toolhead** | 1 ACE lane → 1 toolhead, ACE retracts on U1 unload | Yes |
-| **2+2 split** | 2 ACE lanes → T0/T1, 2 lanes → T2/T3, lane switch during park dwell | Yes |
+| Mode | ACE units | Description | ACE protocol |
+|------|-----------|-------------|-------------|
+| **Dumb drybox** | 1 | ACE feeds passively into U1 entry points, no protocol | No |
+| **Lane-per-toolhead** | 1 | 1 ACE lane per toolhead, coordinated load/unload | Yes |
+| **Per-feeder** | 2 | One ACE per U1 feeder side (left: T0+T1 / right: T2+T3) | Yes |
+| **2+2 split** | 1 or 2 | 2 ACE lanes per toolhead, lane switch during park dwell | Yes |
+
+The U1 has two internal feed modules — left (T0+T1) and right (T2+T3). The
+per-feeder mode matches this structure directly and enables each toolhead pair
+to have its own dedicated ACE with 4 lanes to share.
 
 Start with dumb drybox to validate Bowden routing and path lengths, then layer
-in protocol integration.
+in protocol integration. See [DESIGN.md](DESIGN.md) for full mode analysis.
 
 ## Software Architecture
 

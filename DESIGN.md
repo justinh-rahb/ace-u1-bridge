@@ -65,18 +65,47 @@ load on feed complete. Dryer control from U1 side via router events.
 **Cons:** No lane switching within a toolhead (still 4 colors max, same as stock)  
 **Gain:** Active drying, endless spool potential, spool management
 
-### Mode 3: 2+2 Split (lane switching per toolhead pair)
+### Mode 3: One ACE Per Feeder (dual-ACE, one per side)
 
-ACE lanes 0+1 → T0, lanes 2+3 → T1 (or any split). Each ACE-equipped
-toolhead can switch between 2 colors. During SnapSwap dwell time (toolhead
-parked, ~70°C standby), ACE performs the lane switch. The slicer must be
-aware of which toolhead has multiple lanes.
+The U1 has two internal feed modules: left (e0+e1 → T0+T1) and right
+(e2+e3 → T2+T3). Running one ACE unit per feeder mirrors this structure
+exactly and halves the Bowden length to each toolhead pair.
 
-**Pros:** 6+ effective colors (2 singles + 2 dual-lane heads), unique capability  
-**Cons:** Complex routing table in macros, lane switch must complete in park dwell window  
+Configuration: `ace_count: 2` in a single ACE Klipper instance. The driver
+auto-discovers both units by USB topology; the unit plugged into the
+lower-numbered root port becomes instance 0 (left feeder). Global INDEX
+numbering: ACE 0 → INDEX 0-3, ACE 1 → INDEX 4-7.
+
+Lane mapping in `_ACE_LANE_MAP`:
+- T0 → INDEX 0, T1 → INDEX 2  (ACE 0, left feeder)
+- T2 → INDEX 4, T3 → INDEX 6  (ACE 1, right feeder)
+- Alt lanes for 2+2 are INDEX 1/3 (ACE 0) and INDEX 5/7 (ACE 1)
+
+**Pros:** Shorter, straighter Bowden runs; feeder-matched fault isolation;
+4-slot reserve per toolhead pair for lane switching
+**Cons:** Hardware cost of a second ACE unit; needs two USB ports on host
+**Gain:** Each toolhead pair can independently switch between 2 materials
+(4 ACE slots ÷ 2 toolheads = 2 lanes each), enabled by 2+2 mode below
+
+### Mode 4: 2+2 Split (lane switching within a toolhead)
+
+With a single ACE: lanes 0+1 → T0, lanes 2+3 → T1 (T2/T3 single material).
+With dual ACE: all 4 toolheads can each have 2 lanes (full 2+2 across the
+board). Each ACE-equipped toolhead can switch between 2 colors during the
+SnapSwap park dwell period (~70°C standby). The slicer must plan which
+color each toolhead carries for a given layer range.
+
+Set `t*_alt_lane` values in `_ACE_LANE_MAP` to enable 2+2 for a toolhead.
+
+**Pros:** Doubles effective color count (up to 8 colors with dual ACE)
+**Cons:** Lane switch must complete within park dwell window; slicer awareness required
 **Open question:** Is park dwell time long enough for a full ACE lane switch cycle?
 
-### Mode 4: Full 4-lane on one toolhead
+### Mode 5: Full 4-lane on one toolhead
+
+All 4 ACE lanes → 1 toolhead via a 4-in-1 passive splitter. Other 3 toolheads
+unchanged. Maximum color count on one head, but requires splitter hardware
+and significantly more complex tip-forming tuning.
 
 All 4 ACE lanes → 1 toolhead via a 4-in-1 passive splitter. Other 3 toolheads
 unchanged. Maximum color count on one head, but requires splitter hardware
