@@ -1,0 +1,6 @@
+[submodule "upstream/klipper-router"]
+	path = upstream/klipper-router
+	url = https://github.com/justinh-rahb/klipper-router.git
+[submodule "upstream/ACEPRO"]
+	path = upstream/ACEPRO
+	url = https://github.com/Kobra-S1/ACEPRO.git
