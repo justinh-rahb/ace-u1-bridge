@@ -107,10 +107,6 @@ All 4 ACE lanes → 1 toolhead via a 4-in-1 passive splitter. Other 3 toolheads
 unchanged. Maximum color count on one head, but requires splitter hardware
 and significantly more complex tip-forming tuning.
 
-All 4 ACE lanes → 1 toolhead via a 4-in-1 passive splitter. Other 3 toolheads
-unchanged. Maximum color count on one head, but requires splitter hardware
-and significantly more complex tip-forming tuning.
-
 **Not recommended as starting point.** The U1's integrated-nozzle design
 (heat sink + heat break + block + nozzle as one unit, no individual
 replacement) makes hotend modifications risky.

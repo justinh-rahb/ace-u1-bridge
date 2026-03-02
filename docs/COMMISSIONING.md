@@ -47,8 +47,14 @@ Follow in order — each phase validates the next.
    # Look for: usb-Anycubic_ACE_Pro_* or similar
    ```
 
-3. Edit `config/klipper-ace/ace_instance.cfg` — uncomment the `serial_0:`
-   line and set the correct path from step 2.
+3. Verify the ACE Pro is visible to the host. The driver auto-discovers the
+   device by USB description — no serial path is configured in the config file.
+   ```bash
+   python3 -m serial.tools.list_ports --verbose | grep -i ace
+   # or: ls /dev/serial/by-id/ | grep -i anycubic
+   ```
+   If running two ACE units (per-feeder mode), confirm both appear. The unit
+   on the lower-numbered USB root port becomes instance 0.
 
 4. Ensure the host MCU is available (the ACE instance uses it as a
    placeholder since it has no physical MCU board):

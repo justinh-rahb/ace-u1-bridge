@@ -205,11 +205,8 @@ cd ace-u1-bridge
 # Install ACE extras into Klipper
 ./scripts/install.sh
 
-# Find your ACE Pro USB serial path
-ls /dev/serial/by-id/
-
-# Edit the serial path in the ACE config
-nano config/klipper-ace/ace_instance.cfg
+# Verify the ACE Pro is detected on USB (auto-discovered, no config needed)
+python3 -m serial.tools.list_ports --verbose | grep -i ace
 
 # Start the ACE Klipper instance
 ~/klippy-env/bin/python ~/klipper/klippy.py \
