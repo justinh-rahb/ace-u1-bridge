@@ -32,26 +32,30 @@ Follow in order — each phase validates the next.
 
 **Goal:** Stand up a second Klipper process that talks to the ACE Pro.
 
-1. Clone the ACEPRO driver:
+1. Run the install script to symlink ACE extras into Klipper:
    ```bash
-   cd ~
-   git clone https://github.com/Kobra-S1/ACEPRO.git
+   cd ~/ace-u1-bridge
+   ./scripts/install.sh
    ```
+   This symlinks the `ace/` package and `virtual_pins.py` from the ACEPRO
+   submodule into `~/klipper/klippy/extras/`. Set `KLIPPER_DIR` env var if
+   your Klipper checkout is not at `~/klipper`.
 
-2. Symlink the extras into your Klipper installation:
-   ```bash
-   ln -sf ~/ACEPRO/extras/ace.py ~/klipper/klippy/extras/ace.py
-   ln -sf ~/ACEPRO/extras/virtual_pins.py ~/klipper/klippy/extras/virtual_pins.py
-   ```
-
-3. Find the ACE Pro USB serial path:
+2. Find the ACE Pro USB serial path:
    ```bash
    ls /dev/serial/by-id/
    # Look for: usb-Anycubic_ACE_Pro_* or similar
    ```
 
-4. Edit `config/klipper-ace/ace_instance.cfg` — uncomment the `serial:` line
-   and set the correct path.
+3. Edit `config/klipper-ace/ace_instance.cfg` — uncomment the `serial_0:`
+   line and set the correct path from step 2.
+
+4. Ensure the host MCU is available (the ACE instance uses it as a
+   placeholder since it has no physical MCU board):
+   ```bash
+   # If not already running:
+   sudo systemctl start klipper-mcu
+   ```
 
 5. Start the ACE Klipper instance on a separate socket:
    ```bash
@@ -78,16 +82,14 @@ Follow in order — each phase validates the next.
 
 **Goal:** Connect U1 and ACE instances via the router.
 
-1. Install the router:
-   ```bash
-   cd ~
-   git clone https://github.com/justinh-rahb/klipper-router.git
-   pip3 install -r klipper-router/requirements.txt  # if any
-   ```
+1. The router is included as a submodule. No separate clone needed.
+   If the U1 socket path differs from the default (`/tmp/klippy_uds`),
+   edit `config/klipper-router/router.cfg` and update the `sock:` value
+   under `[klippy u1]`.
 
 2. Start the router pointing at the config:
    ```bash
-   python3 ~/klipper-router/src/klipper_router.py \
+   python3 ~/ace-u1-bridge/upstream/klipper-router/src/klipper_router.py \
      -c ~/ace-u1-bridge/config/klipper-router/router.cfg
    ```
 
@@ -162,8 +164,43 @@ Follow in order — each phase validates the next.
 Set up the ACE Klipper instance and router as systemd services so they start
 automatically with the printer.
 
-Templates TBD — model after the existing Klipper/Moonraker service files on
-the U1.
+1. Run the install script with the `--services` flag:
+   ```bash
+   ./scripts/install.sh --services
+   ```
+   This installs `klipper-ace.service` and `klipper-router.service` into
+   `/etc/systemd/system/` with paths substituted for your environment.
+
+2. Enable and start the services:
+   ```bash
+   sudo systemctl enable --now klipper-ace
+   sudo systemctl enable --now klipper-router
+   ```
+
+3. Check status:
+   ```bash
+   sudo systemctl status klipper-ace klipper-router
+   ```
+
+4. View logs:
+   ```bash
+   journalctl -u klipper-ace -f
+   journalctl -u klipper-router -f
+   ```
+
+The service templates are in `systemd/`. If you need to adjust paths or
+startup ordering, edit the installed copies in `/etc/systemd/system/`.
+
+## Connectivity Validation
+
+At any point during commissioning, run the test script to check system state:
+
+```bash
+./scripts/test_connection.sh
+```
+
+This verifies Unix sockets, running processes, ACE hardware detection,
+router event registration, and systemd service status.
 
 ## Bowden Path Length Measurements
 

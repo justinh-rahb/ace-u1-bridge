@@ -1,0 +1,35 @@
+# klipper-ace.service — ACE Pro Klipper instance
+#
+# Runs a headless Klipper process for the ACE Pro filament manager.
+# Install with: scripts/install.sh --services
+#
+# Path placeholders are substituted by install.sh:
+#   %KLIPPY_ENV%  → klippy virtualenv path
+#   %KLIPPER_DIR% → klipper checkout path
+#   %BRIDGE_DIR%  → ace-u1-bridge repo path
+#   %USER%        → installing user
+
+[Unit]
+Description=Klipper instance for ACE Pro filament manager
+Documentation=https://github.com/justinh-rahb/ace-u1-bridge
+After=network.target klipper.service
+Wants=klipper-mcu.service
+
+[Service]
+Type=simple
+User=%USER%
+ExecStart=%KLIPPY_ENV%/bin/python %KLIPPER_DIR%/klippy/klippy.py \
+    %BRIDGE_DIR%/config/klipper-ace/printer.cfg \
+    -a /tmp/klippy_ace_uds \
+    -l /tmp/klippy_ace.log
+Restart=on-failure
+RestartSec=5
+Nice=10
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=klipper-ace
+
+[Install]
+WantedBy=multi-user.target

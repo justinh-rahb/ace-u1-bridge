@@ -167,12 +167,17 @@ ace-u1-bridge/
 ├── macros/
 │   ├── ace_bridge.cfg          # U1-side event handlers & handoff macros
 │   └── ace_events.cfg          # ACE-side event handlers
+├── scripts/
+│   ├── install.sh              # symlink ACE extras, install services
+│   └── test_connection.sh      # validate connectivity between instances
+├── systemd/
+│   ├── klipper-ace.service     # ACE Klipper instance service template
+│   └── klipper-router.service  # router daemon service template
 ├── docs/
 │   ├── BOWDEN_ROUTING.md       # physical routing notes, path length measurements
 │   └── COMMISSIONING.md        # step-by-step bring-up guide
-└── upstream/                   # git submodules
+└── upstream/                   # git submodules (read-only)
     ├── klipper-router          # github.com/justinh-rahb/klipper-router
-    ├── klipper_configs         # github.com/justinh-rahb/klipper_configs
     └── ACEPRO                  # github.com/Kobra-S1/ACEPRO
 ```
 
@@ -181,10 +186,41 @@ ace-u1-bridge/
 | Repo | Role |
 |------|------|
 | [justinh-rahb/klipper-router](https://github.com/justinh-rahb/klipper-router) | JSON-RPC bridge daemon |
-| [justinh-rahb/klipper_configs](https://github.com/justinh-rahb/klipper_configs) | U1 Klipper configs (source of truth) |
 | [Kobra-S1/ACEPRO](https://github.com/Kobra-S1/ACEPRO) | ACE Pro Klipper driver (`ace.py`) |
 | [ANYCUBIC-3D/klipper-go](https://github.com/ANYCUBIC-3D/klipper-go) | Reference: Anycubic's own Golang Klipper port |
 | [jbatonnet/Rinkhals](https://github.com/jbatonnet/Rinkhals) | Reference: community CFW for Kobra 3 V2 |
+
+## Quick Start
+
+```bash
+# Clone with submodules
+git clone --recurse-submodules https://github.com/justinh-rahb/ace-u1-bridge.git
+cd ace-u1-bridge
+
+# Install ACE extras into Klipper
+./scripts/install.sh
+
+# Find your ACE Pro USB serial path
+ls /dev/serial/by-id/
+
+# Edit the serial path in the ACE config
+nano config/klipper-ace/ace_instance.cfg
+
+# Start the ACE Klipper instance
+~/klippy-env/bin/python ~/klipper/klippy.py \
+  config/klipper-ace/printer.cfg \
+  -a /tmp/klippy_ace_uds \
+  -l /tmp/klippy_ace.log
+
+# Start the router
+python3 upstream/klipper-router/src/klipper_router.py \
+  -c config/klipper-router/router.cfg
+
+# Validate everything is connected
+./scripts/test_connection.sh
+```
+
+For the full bring-up procedure, see [docs/COMMISSIONING.md](docs/COMMISSIONING.md).
 
 ## Getting Started
 
@@ -192,9 +228,11 @@ See [docs/COMMISSIONING.md](docs/COMMISSIONING.md) for the full bring-up
 sequence. The recommended order is:
 
 1. Validate dumb drybox routing (no firmware changes)
-2. Stand up ACE Klipper instance, verify `ace.py` communicates with hardware
-3. Deploy Klipper Router, verify U1 ↔ ACE connection
-4. Load `ace_bridge.cfg` on U1, `ace_events.cfg` on ACE instance
-5. Test manual load/unload event flow
-6. Dial in Bowden path length constants
-7. Enable automatic handoff in slicer start gcode
+2. Run `./scripts/install.sh` to symlink ACE extras into Klipper
+3. Configure `config/klipper-ace/ace_instance.cfg` with your USB serial path
+4. Stand up ACE Klipper instance, verify `ace.py` communicates with hardware
+5. Deploy Klipper Router, verify U1 ↔ ACE connection
+6. Load `ace_bridge.cfg` on U1, `ace_events.cfg` on ACE instance
+7. Test manual load/unload event flow
+8. Dial in Bowden path length constants (record in [docs/BOWDEN_ROUTING.md](docs/BOWDEN_ROUTING.md))
+9. Optionally install systemd services: `./scripts/install.sh --services`

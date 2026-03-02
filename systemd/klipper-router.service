@@ -1,0 +1,31 @@
+# klipper-router.service — Klipper Router daemon
+#
+# Bridges JSON-RPC between the U1 and ACE Klipper instances.
+# Install with: scripts/install.sh --services
+#
+# Path placeholders are substituted by install.sh:
+#   %ROUTER_DIR% → klipper-router repo path
+#   %BRIDGE_DIR% → ace-u1-bridge repo path
+#   %USER%       → installing user
+
+[Unit]
+Description=Klipper Router — JSON-RPC bridge for U1 ↔ ACE
+Documentation=https://github.com/justinh-rahb/klipper-router
+After=network.target klipper.service klipper-ace.service
+
+[Service]
+Type=simple
+User=%USER%
+ExecStart=/usr/bin/python3 %ROUTER_DIR%/src/klipper_router.py \
+    -c %BRIDGE_DIR%/config/klipper-router/router.cfg
+Restart=on-failure
+RestartSec=3
+Nice=10
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=klipper-router
+
+[Install]
+WantedBy=multi-user.target
