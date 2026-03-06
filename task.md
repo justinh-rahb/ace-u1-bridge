@@ -575,23 +575,43 @@ Make this work as a small series, not one large commit.
 
 Recommended commit structure:
 
-1. `chore: rebase upstreams and align ace overlay tasking`
+1. `[done] chore: rebase upstreams and align ace overlay tasking`
    - `.gitmodules`
    - submodule updates
    - `task.md`
 
-2. `feat: add u1 router core overlay substrate`
+2. `[done] feat: add u1 router core overlay substrate`
    - Overlay 25 files
 
-3. `feat: add ace instance overlay scaffold`
+3. `[done] feat: add ace instance overlay scaffold`
    - Overlay 26 install/config files
 
-4. `feat: add u1 ace bridge macros and settings`
+4. `[done] feat: add u1 ace bridge macros and settings`
    - main-side bridge macros
    - ACE firmware-config YAML
 
-5. `docs: document u1 ace overlay series`
+5. `[done] docs: document u1 ace overlay series`
    - overlay READMEs
+
+## Progress Log
+
+- 2026-03-06: Commit 1 landed in the superproject.
+- 2026-03-06: Commit 2 landed in the firmware submodule and was recorded in the superproject.
+- 2026-03-06: Overlay `26-u1-ace-instance` scaffold added in the firmware submodule.
+- 2026-03-06: Firmware submodule commit `321cbb4` landed with:
+  - vanilla Klipper install script
+  - ACEPRO payload install wiring
+  - seeded ACE router instance files
+  - main-side ACE bridge include
+  - ACE firmware-config settings
+  - overlay README
+- 2026-03-06: Pending validation:
+  - verify router target naming assumptions (`main` vs `u1`)
+  - verify selected vanilla Klipper SHA against desired compatibility target
+  - run build-oriented checks on overlay file layout and shell/YAML syntax
+- 2026-03-06: Next commit target:
+  - commit superproject submodule pointer and `task.md`
+  - run higher-confidence validation on the overlay wiring
 
 ---
 
