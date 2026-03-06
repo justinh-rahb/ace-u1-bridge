@@ -606,12 +606,14 @@ Recommended commit structure:
   - ACE firmware-config settings
   - overlay README
 - 2026-03-06: Pending validation:
-  - verify router target naming assumptions (`main` vs `u1`)
   - verify selected vanilla Klipper SHA against desired compatibility target
-  - run build-oriented checks on overlay file layout and shell/YAML syntax
+- 2026-03-06: Validation completed:
+  - router target naming checked against seeded router config: base instance name is `main`
+  - `26-u1-ace-instance/scripts/01-install-vanilla-klipper.sh` passes `bash -n`
+  - `26_settings_ace.yaml` parses successfully via Ruby YAML
 - 2026-03-06: Next commit target:
-  - commit superproject submodule pointer and `task.md`
-  - run higher-confidence validation on the overlay wiring
+  - revisit the pinned vanilla Klipper SHA if a stricter compatibility target emerges
+  - run build-level validation when the firmware build environment is available
 
 ---
 
