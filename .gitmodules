@@ -3,4 +3,8 @@
 	url = https://github.com/justinh-rahb/klipper-router.git
 [submodule "upstream/ACEPRO"]
 	path = upstream/ACEPRO
-	url = https://github.com/Kobra-S1/ACEPRO.git
+	url = https://github.com/justinh-rahb/ACEPRO.git
+[submodule "upstream/SnapmakerU1-Extended-Firmware"]
+	path = upstream/SnapmakerU1-Extended-Firmware
+	url = https://github.com/justinh-rahb/SnapmakerU1-Extended-Firmware.git
+	branch = develop
