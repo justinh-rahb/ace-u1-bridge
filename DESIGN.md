@@ -195,6 +195,49 @@ Mainsail/Fluidd can display which ACE slot is loaded in which lane.
 - [ ] Endless spool: the ACEPRO driver lists this as TODO — is it far enough
       along to be useful, or should that be a separate contribution?
 
+## ACE Pro Hardware Internals
+
+The ACE Pro runs a **GD32F303** (GigaDevice Cortex-M4, 72MHz) — a drop-in-compatible
+clone of the STM32F303 — running **FreeRTOS**. This is useful context for understanding
+protocol behaviour and for direct hardware access.
+
+### Debug Interface
+
+An SWD header is present near the MCU with unpopulated pads. Once a pinheader is soldered,
+a standard ST-Link V2 can attach for full debug and flash access:
+
+```
+ST-Link V2 pinout on the ACE Pro SWD header:
+  SWCLK  SWDIO  GND  3.3V
+```
+
+Full bootloader + application dumping works over SWD. This gives direct access to the
+firmware image for analysis or custom builds.
+
+### USB Access
+
+The ACE Pro presents a USB serial interface to the host. The **"Hub" port** on the back
+panel (the USB hub connector) can be wired directly to a PC to access this interface
+without going through the back panel hub — useful for development and protocol analysis.
+
+### OTA Update Protocol
+
+The application firmware supports an OTA update protocol that has been reverse-engineered.
+A Python script can be used to up- or downgrade the MCU application area over this
+protocol, without requiring SWD access. This means:
+
+- Custom firmware can be deployed without soldering
+- Firmware rollback is possible if a new version breaks the serial protocol
+- The OTA path is the lowest-friction way to ship firmware modifications
+
+### Implications for This Project
+
+- The `ace` Klipper extra communicates entirely over the USB serial JSON-RPC protocol —
+  no firmware modifications are needed for the integration described here
+- If the upstream ACEPRO driver ever lacks a needed feature (e.g. endless spool, tangle
+  detection improvements), it may be possible to add it at the firmware level via OTA
+- SWD access enables protocol-level debugging if the JSON-RPC handshake ever misbehaves
+
 ## Related Projects & Reference
 
 | Project | Relevance |

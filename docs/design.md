@@ -209,6 +209,44 @@ loaded in which lane.
 - [ ] For 2+2 mode: does the lane switch need a dedicated 2-in-1 passive splitter at the toolhead entry, or can the ACE output directly?
 - [ ] Endless spool: the ACEPRO driver lists this as TODO — is it far enough along to be useful, or should that be a separate contribution?
 
+## ACE Pro Hardware Internals
+
+The ACE Pro runs a **GD32F303** (GigaDevice Cortex-M4, 72MHz) — a drop-in-compatible
+clone of the STM32F303 — running **FreeRTOS**.
+
+### MCU & Debug Interface
+
+| Property | Value |
+|----------|-------|
+| MCU | GD32F303 (GigaDevice Cortex-M4) |
+| Clock | 72 MHz |
+| RTOS | FreeRTOS |
+| Debug | SWD header near MCU (pads, needs pinheader soldered) |
+| Debugger | ST-Link V2 works for full flash/debug access |
+
+An SWD header is present near the MCU. Once a pinheader is soldered, a standard ST-Link
+V2 can attach for full debug and flash access. Full bootloader + application dumping
+works over SWD.
+
+### USB Access Without the Hub
+
+The **"Hub" port** on the ACE Pro back panel is a USB hub connector. Wiring it directly
+to a PC bypasses the back-panel hub and gives direct access to the USB serial interface —
+useful for protocol analysis and development without the full hardware stack.
+
+### OTA Firmware Updates
+
+The application firmware supports an OTA update protocol that has been reverse-engineered.
+A Python script can up- or downgrade the MCU application area over this protocol,
+without requiring SWD access.
+
+!!! note "Implications for this project"
+    The `ace` Klipper extra communicates entirely over the USB serial JSON-RPC protocol —
+    no firmware modifications are needed for the integration described here. However, the
+    OTA path means that if the upstream driver ever lacks a needed feature, custom firmware
+    can be deployed without soldering. SWD access enables protocol-level debugging if the
+    JSON-RPC handshake ever misbehaves.
+
 ## Related Projects
 
 | Project | Relevance |
