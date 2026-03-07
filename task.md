@@ -617,6 +617,9 @@ Recommended commit structure:
 - 2026-03-07: Dependency verification adjusted:
   - retained explicit `jinja2` and `pyserial` verification per task requirements
   - widened the module search to the full extracted rootfs because limiting it to `usr/lib` and `usr/local/lib` can miss the existing Klipper runtime environment
+- 2026-03-07: Follow-up on dependency verification:
+  - broadened module path matching beyond `site-packages` and `dist-packages`
+  - reason: embedded Python installs may place `jinja2` and `serial` directly under `pythonX.Y/`
 - 2026-03-06: Next commit target:
   - revisit the pinned vanilla Klipper SHA if a stricter compatibility target emerges
   - run build-level validation when the firmware build environment is available
