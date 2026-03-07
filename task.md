@@ -611,6 +611,9 @@ Recommended commit structure:
   - router target naming checked against seeded router config: base instance name is `main`
   - `26-u1-ace-instance/scripts/01-install-vanilla-klipper.sh` passes `bash -n`
   - `26_settings_ace.yaml` parses successfully via Ruby YAML
+- 2026-03-07: Build failure root cause identified:
+  - `ACEPRO_GIT_SHA` in `01-install-vanilla-klipper.sh` was pinned to a non-existent commit
+  - corrected to local/upstream pinned ACEPRO commit `55ec2f783410aadacb0776cf9649cad7694455cf`
 - 2026-03-06: Next commit target:
   - revisit the pinned vanilla Klipper SHA if a stricter compatibility target emerges
   - run build-level validation when the firmware build environment is available
