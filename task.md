@@ -620,6 +620,10 @@ Recommended commit structure:
 - 2026-03-07: Follow-up on dependency verification:
   - broadened module path matching beyond `site-packages` and `dist-packages`
   - reason: embedded Python installs may place `jinja2` and `serial` directly under `pythonX.Y/`
+- 2026-03-07: Live-printer inspection results:
+  - `/usr/bin/python3` imports both `jinja2` and `serial` successfully on-device
+  - modules resolve to `/usr/lib/python3.11/site-packages/.../__init__.pyc`
+  - verifier updated to accept `__init__.pyc` as well as `__init__.py`
 - 2026-03-06: Next commit target:
   - revisit the pinned vanilla Klipper SHA if a stricter compatibility target emerges
   - run build-level validation when the firmware build environment is available
