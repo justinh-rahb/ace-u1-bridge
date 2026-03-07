@@ -624,6 +624,9 @@ Recommended commit structure:
   - `/usr/bin/python3` imports both `jinja2` and `serial` successfully on-device
   - modules resolve to `/usr/lib/python3.11/site-packages/.../__init__.pyc`
   - verifier updated to accept `__init__.pyc` as well as `__init__.py`
+- 2026-03-07: Image size mitigation:
+  - stopped copying the vanilla Klipper `.git` directory into `/home/lava/klipper-vanilla`
+  - installer now archives the pinned Klipper tree and extracts only tracked files
 - 2026-03-06: Next commit target:
   - revisit the pinned vanilla Klipper SHA if a stricter compatibility target emerges
   - run build-level validation when the firmware build environment is available
