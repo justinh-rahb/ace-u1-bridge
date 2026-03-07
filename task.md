@@ -614,6 +614,9 @@ Recommended commit structure:
 - 2026-03-07: Build failure root cause identified:
   - `ACEPRO_GIT_SHA` in `01-install-vanilla-klipper.sh` was pinned to a non-existent commit
   - corrected to local/upstream pinned ACEPRO commit `55ec2f783410aadacb0776cf9649cad7694455cf`
+- 2026-03-07: Dependency verification adjusted:
+  - retained explicit `jinja2` and `pyserial` verification per task requirements
+  - widened the module search to the full extracted rootfs because limiting it to `usr/lib` and `usr/local/lib` can miss the existing Klipper runtime environment
 - 2026-03-06: Next commit target:
   - revisit the pinned vanilla Klipper SHA if a stricter compatibility target emerges
   - run build-level validation when the firmware build environment is available
