@@ -89,9 +89,9 @@ in protocol integration. See [DESIGN.md](DESIGN.md) for full mode analysis.
 
 **Why two Klipper instances?**
 The U1 runs a heavily modified Klipper fork (Snapmaker's own build). The ACE
-Pro driver (`ace.py`) is a vanilla Klipper extra that speaks serial JSON-RPC
-to the ACE hardware. Running them in separate Klipper processes keeps the U1
-firmware untouched and lets the ACE instance run stock/vanilla Klipper.
+Pro driver (`ace.py`) speaks serial JSON-RPC to the ACE hardware. Running it
+in a separate Klipper process keeps the U1 firmware untouched and lets the ACE
+instance run from a derived copy of the stock Klipper tree.
 
 **Why Klipper Router?**
 Klipper Router (see `upstream/klipper-router`) is a small async Python bridge

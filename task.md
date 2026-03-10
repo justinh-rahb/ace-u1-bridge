@@ -624,7 +624,7 @@ Recommended commit structure:
   - modules resolve to `/usr/lib/python3.11/site-packages/.../__init__.pyc`
   - verifier updated to accept `__init__.pyc` as well as `__init__.py`
 - 2026-03-09: Deployment model changed:
-  - dropped the fetched `klipper-vanilla` tree entirely
+  - dropped the separate fetched Klipper tree entirely
   - ACE now runs from `/home/lava/klipper-ace`, copied from the on-device `/home/lava/klipper`
   - ACE payload is staged under `/usr/local/share/ace-klipper/`
   - enable flow refreshes the derived ACE runtime before restart
