@@ -142,7 +142,7 @@ complex tip-forming tuning.
 
 The U1 runs Snapmaker's proprietary Klipper fork with custom modules (`filament_feed`,
 `park_detector`, `filament_entangle_detect`, `inductance_coil`, `fm175xx_reader`, etc.)
-that don't exist in vanilla Klipper. Adding `ace.py` as an extra *might* work, but:
+that don't exist in a clean upstream-style runtime. Adding `ace.py` as an extra *might* work, but:
 
 1. Snapmaker OTA updates would need to preserve the extra
 2. If `ace.py` crashes, it takes the main printer process with it

@@ -255,8 +255,8 @@ When continuing this work in Claude Code, provide this context:
 
 > This project integrates an Anycubic ACE Pro multi-material unit with a
 > Snapmaker U1 4-toolhead printer. The U1 runs a proprietary Klipper fork
-> with custom modules. We are running a second minimal vanilla Klipper instance
-> for the ACE Pro, and using klipper-router (a JSON-RPC bridge over Unix
+> with custom modules. We are running a second minimal Klipper instance
+> derived from the stock U1 tree for the ACE Pro, and using klipper-router (a JSON-RPC bridge over Unix
 > sockets) to coordinate between them. The U1 handles all print operations;
 > ACE handles filament from spool to U1 back panel entry. The handoff is
 > event-driven via router/event/trigger. Read README.md, DESIGN.md, and all
