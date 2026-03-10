@@ -636,6 +636,8 @@ Recommended commit structure:
 - 2026-03-10: ACE runtime config compatibility:
   - stock U1-derived Klipper requires `max_logical_extruder_num` in `[printer]`
   - ACE instance `printer.cfg` now sets `max_logical_extruder_num: 32` to match existing firmware test configs
+  - stock U1-derived Klipper also requires `max_physical_extruder_num` in `[printer]`
+  - ACE instance `printer.cfg` now sets `max_physical_extruder_num: 4` to satisfy Snapmaker toolhead assumptions
 - 2026-03-06: Next commit target:
   - run build-level validation when the firmware build environment is available
 
