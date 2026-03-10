@@ -626,6 +626,9 @@ Recommended commit structure:
   - ACE now runs from `/home/lava/klipper-ace`, copied from the on-device `/home/lava/klipper`
   - build now prepares `/home/lava/klipper-ace` in the firmware image
   - enable flow only toggles config and restarts services
+- 2026-03-09: ACE toggle hardening:
+  - seeded `[ace] enabled: false` in the shipped default `extended2.cfg`
+  - changed ACE firmware-config restart order to restart `S60klipper` before `S98` and `S99`
 - 2026-03-06: Next commit target:
   - run build-level validation when the firmware build environment is available
 
