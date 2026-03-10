@@ -629,6 +629,10 @@ Recommended commit structure:
 - 2026-03-09: ACE toggle hardening:
   - seeded `[ace] enabled: false` in the shipped default `extended2.cfg`
   - changed ACE firmware-config restart order to restart `S60klipper` before `S98` and `S99`
+- 2026-03-10: Firmware-config root cause identified:
+  - ACE and router toggles both used the same item id `enabled`
+  - `firmware-config.py` resolves settings by id globally, so the ACE toggle could execute the router command
+  - fixed by giving the toggles unique ids: `ace_enabled` and `router_enabled`
 - 2026-03-06: Next commit target:
   - run build-level validation when the firmware build environment is available
 
