@@ -641,7 +641,8 @@ Recommended commit structure:
 - 2026-03-10: ACE host MCU sidecar:
   - ACE reaches runtime startup but shuts down with `Lost communication with MCU 'mcu'`
   - `S98klipper-router-instances` now supports optional per-instance `mcu_path` and `mcu_args`
-  - the ACE instance seeds `/home/lava/firmware_MCU/klippy_mcu` with `-r` so `/tmp/klipper_host_mcu` has a live backend
+  - the ACE instance seeds `/home/lava/firmware_MCU/klippy_mcu` with `-r -I /tmp/klipper_host_mcu_ace`
+  - ACE `printer.cfg` now points `[mcu] serial:` at `/tmp/klipper_host_mcu_ace` instead of the shared main-instance endpoint
 - 2026-03-06: Next commit target:
   - run build-level validation when the firmware build environment is available
 
