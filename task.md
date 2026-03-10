@@ -206,8 +206,8 @@ If this file exists:
 
 use its content as the Klippy executable path for that instance.
 
-This is required for ACE, because ACE must run against a vanilla Klipper tree,
-not the proprietary `/home/lava/klipper`.
+This allows ACE to select a separate derived runtime instead of the stock
+instance managed by `/home/lava/klipper/klippy/klippy.py`.
 
 #### Per-instance enable gating
 
@@ -319,8 +319,10 @@ router substrate from Overlay 25.
 overlays/firmware-extended/26-u1-ace-instance/
 ├── README.md
 ├── scripts/
-│   └── 01-install-vanilla-klipper.sh
+│   └── 01-install-ace-klipper-payload.sh
 └── root/
+    └── usr/local/bin/
+        └── ace-klipper-sync
     └── usr/local/share/firmware-config/
         ├── extended/
         │   ├── klipper/
@@ -338,24 +340,21 @@ overlays/firmware-extended/26-u1-ace-instance/
             └── 26_settings_ace.yaml
 ```
 
-### `scripts/01-install-vanilla-klipper.sh`
+### `scripts/01-install-ace-klipper-payload.sh`
 
 Requirements:
 
 - require `CREATE_FIRMWARE`
 - use `cache_git.sh`
-- clone upstream vanilla Klipper from:
-  - `https://github.com/Klipper3d/klipper.git`
-- pin an explicit SHA in the script
-- install to:
-  - `$1/home/lava/klipper-vanilla`
 - copy ACEPRO payload from:
   - `https://github.com/justinh-rahb/ACEPRO.git`
 - pin to:
   - `55ec2f7`
-- install into the vanilla tree:
-  - `klippy/extras/ace/`
-  - `klippy/extras/virtual_pins.py`
+- install payload to:
+  - `/usr/local/share/ace-klipper/ace/`
+  - `/usr/local/share/ace-klipper/virtual_pins.py`
+- install a helper to derive the ACE runtime tree from the on-device Klipper:
+  - `/usr/local/bin/ace-klipper-sync`
 - set ownership to `lava:lava`
 
 #### Python dependency check
@@ -377,10 +376,12 @@ this overlay rather than relying on runtime `pip install`.
 Contents:
 
 ```text
-/home/lava/klipper-vanilla/klippy/klippy.py
+/home/lava/klipper-ace/klippy/klippy.py
 ```
 
 This is consumed by the new per-instance `klippy_path` support in Overlay 25.
+`/home/lava/klipper-ace` is copied from the stock `/home/lava/klipper` tree on
+ACE enable and then augmented with the ACE payload.
 
 ### `root/usr/local/share/firmware-config/extended/router/instances/ace/enabled_config`
 
@@ -527,7 +528,7 @@ Requirements:
   - ACE instance pid status via `/var/run/klippy-router-ace.pid`
   - ACE log path via `/home/lava/printer_data/logs/klippy-router-ace.log`
   - ACE socket presence via `/home/lava/printer_data/comms/klippy-router-ace.sock`
-  - vanilla Klipper install presence via `/home/lava/klipper-vanilla/klippy/klippy.py`
+  - ACE runtime presence via `/home/lava/klipper-ace/klippy/klippy.py`
 - setting:
   - `[ace] enabled: true|false`
 - enable action:
@@ -599,20 +600,18 @@ Recommended commit structure:
 - 2026-03-06: Commit 2 landed in the firmware submodule and was recorded in the superproject.
 - 2026-03-06: Overlay `26-u1-ace-instance` scaffold added in the firmware submodule.
 - 2026-03-06: Firmware submodule commit `321cbb4` landed with:
-  - vanilla Klipper install script
+  - ACE payload install script
   - ACEPRO payload install wiring
   - seeded ACE router instance files
   - main-side ACE bridge include
   - ACE firmware-config settings
   - overlay README
-- 2026-03-06: Pending validation:
-  - verify selected vanilla Klipper SHA against desired compatibility target
 - 2026-03-06: Validation completed:
   - router target naming checked against seeded router config: base instance name is `main`
-  - `26-u1-ace-instance/scripts/01-install-vanilla-klipper.sh` passes `bash -n`
+  - `26-u1-ace-instance/scripts/01-install-ace-klipper-payload.sh` passes `bash -n`
   - `26_settings_ace.yaml` parses successfully via Ruby YAML
 - 2026-03-07: Build failure root cause identified:
-  - `ACEPRO_GIT_SHA` in `01-install-vanilla-klipper.sh` was pinned to a non-existent commit
+  - `ACEPRO_GIT_SHA` in `01-install-ace-klipper-payload.sh` was pinned to a non-existent commit
   - corrected to local/upstream pinned ACEPRO commit `55ec2f783410aadacb0776cf9649cad7694455cf`
 - 2026-03-07: Dependency verification adjusted:
   - retained explicit `jinja2` and `pyserial` verification per task requirements
@@ -624,11 +623,12 @@ Recommended commit structure:
   - `/usr/bin/python3` imports both `jinja2` and `serial` successfully on-device
   - modules resolve to `/usr/lib/python3.11/site-packages/.../__init__.pyc`
   - verifier updated to accept `__init__.pyc` as well as `__init__.py`
-- 2026-03-07: Image size mitigation:
-  - stopped copying the vanilla Klipper `.git` directory into `/home/lava/klipper-vanilla`
-  - installer now archives the pinned Klipper tree and extracts only tracked files
+- 2026-03-09: Deployment model changed:
+  - dropped the fetched `klipper-vanilla` tree entirely
+  - ACE now runs from `/home/lava/klipper-ace`, copied from the on-device `/home/lava/klipper`
+  - ACE payload is staged under `/usr/local/share/ace-klipper/`
+  - enable flow refreshes the derived ACE runtime before restart
 - 2026-03-06: Next commit target:
-  - revisit the pinned vanilla Klipper SHA if a stricter compatibility target emerges
   - run build-level validation when the firmware build environment is available
 
 ---
@@ -642,8 +642,10 @@ This task is complete when all of the following are true:
 - Overlay 25 supports both:
   - per-instance `klippy_path`
   - per-instance `enabled_config`
-- Overlay 26 installs a vanilla Klipper tree plus the ACEPRO package layout
-  actually used by `upstream/ACEPRO`
+- Overlay 26 installs the ACEPRO package layout actually used by
+  `upstream/ACEPRO`
+- Overlay 26 derives an ACE runtime from the on-device `/home/lava/klipper`
+  tree without modifying the stock tree in place
 - Overlay 26 seeds an ACE instance under the persistent router-instance layout
 - main-side bridge macros are auto-included through the existing extended
   Klipper include mechanism
