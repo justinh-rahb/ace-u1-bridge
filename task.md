@@ -321,8 +321,6 @@ overlays/firmware-extended/26-u1-ace-instance/
 ├── scripts/
 │   └── 01-install-ace-klipper-payload.sh
 └── root/
-    └── usr/local/bin/
-        └── ace-klipper-sync
     └── usr/local/share/firmware-config/
         ├── extended/
         │   ├── klipper/
@@ -351,10 +349,10 @@ Requirements:
 - pin to:
   - `55ec2f7`
 - install payload to:
-  - `/usr/local/share/ace-klipper/ace/`
-  - `/usr/local/share/ace-klipper/virtual_pins.py`
-- install a helper to derive the ACE runtime tree from the on-device Klipper:
-  - `/usr/local/bin/ace-klipper-sync`
+  - `/home/lava/klipper-ace/klippy/extras/ace/`
+  - `/home/lava/klipper-ace/klippy/extras/virtual_pins.py`
+- copy the stock Klipper tree from the extracted rootfs to:
+  - `/home/lava/klipper-ace`
 - set ownership to `lava:lava`
 
 #### Python dependency check
@@ -626,8 +624,8 @@ Recommended commit structure:
 - 2026-03-09: Deployment model changed:
   - dropped the separate fetched Klipper tree entirely
   - ACE now runs from `/home/lava/klipper-ace`, copied from the on-device `/home/lava/klipper`
-  - ACE payload is staged under `/usr/local/share/ace-klipper/`
-  - enable flow refreshes the derived ACE runtime before restart
+  - build now prepares `/home/lava/klipper-ace` in the firmware image
+  - enable flow only toggles config and restarts services
 - 2026-03-06: Next commit target:
   - run build-level validation when the firmware build environment is available
 
