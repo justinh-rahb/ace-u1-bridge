@@ -638,6 +638,10 @@ Recommended commit structure:
   - ACE instance `printer.cfg` now sets `max_logical_extruder_num: 32` to match existing firmware test configs
   - stock U1-derived Klipper also requires `max_physical_extruder_num` in `[printer]`
   - ACE instance `printer.cfg` now sets `max_physical_extruder_num: 4` to satisfy Snapmaker toolhead assumptions
+- 2026-03-10: ACE host MCU sidecar:
+  - ACE reaches runtime startup but shuts down with `Lost communication with MCU 'mcu'`
+  - `S98klipper-router-instances` now supports optional per-instance `mcu_path` and `mcu_args`
+  - the ACE instance seeds `/home/lava/firmware_MCU/klippy_mcu` with `-r` so `/tmp/klipper_host_mcu` has a live backend
 - 2026-03-06: Next commit target:
   - run build-level validation when the firmware build environment is available
 
