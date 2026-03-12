@@ -68,6 +68,19 @@ From this repo and `upstream/ACEPRO`:
   - `kinematics: none`
   - host/process MCU via `/tmp/klipper_host_mcu`
 
+### Ready-state drift found during live testing
+
+- `klipper-routerd` already emits:
+  - `ROUTER_ON_READY` on the connection itself
+  - `ROUTER_ON_CONNECTED PRINTER=<name>` to other connected printers
+- router config and init-script injection of those same hooks is therefore
+  duplicate and can produce malformed or misleading runtime behavior
+- older printers may still carry a stale persistent:
+  - `extended/klipper/router_api.cfg`
+  which overrides the ACE bridge macros loaded from `16_router_ace_bridge.cfg`
+- to harden upgrades, ship a later-sorting ACE bridge macro file so the ACE
+  bridge hooks win even when that stale override remains on disk
+
 ### Important drift fact
 
 `upstream/SnapmakerU1-Extended-Firmware` `develop` does not currently contain
@@ -635,8 +648,10 @@ Recommended commit structure:
   - fixed by giving the toggles unique ids: `ace_enabled` and `router_enabled`
 - 2026-03-12: Router ready-state bridge drift:
   - main and ACE bridge callbacks now compare printer names case-insensitively
-  - `S99klipper-router` now emits multi-line instance `on_connect` hooks with `ROUTER_ON_CONNECTED PRINTER=<name>`
-  - shipped main router config now calls `ROUTER_ON_READY` on connect so event subscriptions are re-registered after router startup
+  - live testing showed `klipper-routerd` already emits `ROUTER_ON_READY` and `ROUTER_ON_CONNECTED PRINTER=<name>` automatically
+  - router-core config generation has been corrected to stop injecting those duplicate hooks
+  - some printers retain a stale `extended/klipper/router_api.cfg` from older branches that overrides `16_router_ace_bridge.cfg`
+  - a later-sorting `98_router_ace_bridge.cfg` is now shipped so ACE bridge hooks still win on upgrade
 - 2026-03-10: ACE runtime config compatibility:
   - stock U1-derived Klipper requires `max_logical_extruder_num` in `[printer]`
   - ACE instance `printer.cfg` now sets `max_logical_extruder_num: 32` to match existing firmware test configs
