@@ -647,6 +647,9 @@ Recommended commit structure:
   - `firmware-config.py` resolves settings by id globally, so the ACE toggle could execute the router command
   - fixed by giving the toggles unique ids: `ace_enabled` and `router_enabled`
 - 2026-03-12: Router ready-state bridge drift:
+- 2026-03-12: Router event parameter propagation:
+  - `ROUTER_EVENT_SUBSCRIBE` registrations were using bare macro names, so router event context values never became G-code params
+  - ACE-side and main-side `ROUTER_ON_READY` subscriptions now register full templated G-code strings so `lane`, `length`, `extruder`, `temp`, and `duration` propagate correctly
   - main and ACE bridge callbacks now compare printer names case-insensitively
   - live testing showed `klipper-routerd` already emits `ROUTER_ON_READY` and `ROUTER_ON_CONNECTED PRINTER=<name>` automatically
   - router-core config generation has been corrected to stop injecting those duplicate hooks
