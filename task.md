@@ -633,6 +633,10 @@ Recommended commit structure:
   - ACE and router toggles both used the same item id `enabled`
   - `firmware-config.py` resolves settings by id globally, so the ACE toggle could execute the router command
   - fixed by giving the toggles unique ids: `ace_enabled` and `router_enabled`
+- 2026-03-12: Router ready-state bridge drift:
+  - main and ACE bridge callbacks now compare printer names case-insensitively
+  - `S99klipper-router` now emits multi-line instance `on_connect` hooks with `ROUTER_ON_CONNECTED PRINTER=<name>`
+  - shipped main router config now calls `ROUTER_ON_READY` on connect so event subscriptions are re-registered after router startup
 - 2026-03-10: ACE runtime config compatibility:
   - stock U1-derived Klipper requires `max_logical_extruder_num` in `[printer]`
   - ACE instance `printer.cfg` now sets `max_logical_extruder_num: 32` to match existing firmware test configs
