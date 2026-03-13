@@ -649,6 +649,9 @@ Recommended commit structure:
 - 2026-03-12: Router ready-state bridge drift:
 - 2026-03-12: Router event parameter propagation:
 - 2026-03-12: ACE feed completion timing:
+- 2026-03-12: Minimal manual bridge controls:
+  - added `ACE_BRIDGE_PUSH` and `ACE_BRIDGE_PULL` on main to send raw `ACE_FEED` / `ACE_RETRACT` commands to the ACE instance without invoking Snapmaker `AUTO_FEEDING`
+  - these are intended as low-level bringup and calibration tools while coordinated load/unload timing is still being tuned
   - the ACE instance currently uses a simulated nozzle sensor (`virtual_pin:filament_nozzle_sim`), so it cannot observe real feeder arrival
   - `ace_feed_done` must not fire immediately after `ACE_FEED`; it is now delayed by estimated motion time so main-side `AUTO_FEEDING` starts after ACE transport has had time to reach the U1 feeder
   - `ROUTER_EVENT_SUBSCRIBE` registrations were using bare macro names, so router event context values never became G-code params
