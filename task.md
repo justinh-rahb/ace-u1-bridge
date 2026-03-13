@@ -657,6 +657,21 @@ Recommended commit structure:
   - removed the experimental per-lane tracked-position helpers from the bridge config after live testing showed the simpler direct controls were the only pieces actually helping
   - retained `ACE_BRIDGE_ASSIST_PULSE` as a small convenience wrapper, but the main working toolchange flow is `RELEASE` / `GRAB` plus direct `PUSH` / `PULL`
   - restored `ROUTER_ON_READY` in the shipped main router config so fresh images subscribe ACE event handlers without depending on stale persistent config
+  - live U1 testing confirmed `AUTO_FEEDING EXTRUDER=<n> AUTO=0|1 SAVE=0` toggles feeder auto mode at runtime without using the touchscreen
+  - `filament_feed` status exposes that toggle as `disable_auto`, because the underlying feeder code stores it as `auto_mode[channel]`
+  - with tools fully loaded, the best current loaded signature is:
+    - `module_exist == true`
+    - `filament_detected == true`
+    - `channel_state == "load_finish"`
+    - `channel_action_state == "load_finish"`
+  - measured path lengths on the current machine:
+    - approximately `1200mm` from ACE spool entry to U1 feeder engagement
+    - approximately `1100mm` more under ACE assist from feeder engagement to toolhead
+  - current staged-load automation assumption:
+    - turn feeder auto off
+    - push about `1200mm` to the feeder
+    - poll `filament_motion_sensor eN_filament`
+    - on first toolhead-sensor trip: enable ACE assist, restore feeder auto, and invoke `AUTO_FEEDING EXTRUDER=n LOAD=1`
   - the ACE instance currently uses a simulated nozzle sensor (`virtual_pin:filament_nozzle_sim`), so it cannot observe real feeder arrival
   - `ace_feed_done` must not fire immediately after `ACE_FEED`; it is now delayed by estimated motion time so main-side `AUTO_FEEDING` starts after ACE transport has had time to reach the U1 feeder
   - `ROUTER_EVENT_SUBSCRIBE` registrations were using bare macro names, so router event context values never became G-code params
