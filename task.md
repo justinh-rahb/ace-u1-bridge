@@ -650,6 +650,7 @@ Recommended commit structure:
 - 2026-03-12: Router event parameter propagation:
 - 2026-03-12: ACE feed completion timing:
 - 2026-03-12: Minimal manual bridge controls:
+  - added `ACE_BRIDGE_RELEASE`, `ACE_BRIDGE_GRAB`, and `ACE_BRIDGE_CLEAR_ACTIVE` to manage feed-assist hold state and persisted active-tool state during manual recovery
   - corrected the direct macros to use ACEPRO's required `INSTANCE=0 INDEX=<slot>` syntax instead of invalid bare `INDEX=<slot>`
   - added `ACE_BRIDGE_PUSH` and `ACE_BRIDGE_PULL` on main to send raw `ACE_FEED` / `ACE_RETRACT` commands to the ACE instance without invoking Snapmaker `AUTO_FEEDING`
   - these are intended as low-level bringup and calibration tools while coordinated load/unload timing is still being tuned
