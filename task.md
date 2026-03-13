@@ -667,11 +667,12 @@ Recommended commit structure:
   - measured path lengths on the current machine:
     - approximately `1200mm` from ACE spool entry to U1 feeder engagement
     - approximately `1100mm` more under ACE assist from feeder engagement to toolhead
-  - current staged-load automation assumption:
-    - turn feeder auto off
-    - push about `1200mm` to the feeder
-    - poll `filament_motion_sensor eN_filament`
-    - on first toolhead-sensor trip: enable ACE assist, restore feeder auto, and invoke `AUTO_FEEDING EXTRUDER=n LOAD=1`
+  - revised staged-load workflow after live testing:
+    - `ACE_BRIDGE_LOAD_STAGE` only disables feeder auto and pushes about `1200mm` to the feeder
+    - operator or later automation then starts `ACE_BRIDGE_LOAD_ASSIST`
+    - `ACE_BRIDGE_LOAD_ASSIST` enables ACE assist and polls `filament_motion_sensor eN_filament`
+    - on first toolhead-sensor trip it restores feeder auto
+    - autoload is now optional via `AUTOLOAD=0|1` instead of always forcing `AUTO_FEEDING ... LOAD=1`
   - the ACE instance currently uses a simulated nozzle sensor (`virtual_pin:filament_nozzle_sim`), so it cannot observe real feeder arrival
   - `ace_feed_done` must not fire immediately after `ACE_FEED`; it is now delayed by estimated motion time so main-side `AUTO_FEEDING` starts after ACE transport has had time to reach the U1 feeder
   - `ROUTER_EVENT_SUBSCRIBE` registrations were using bare macro names, so router event context values never became G-code params
