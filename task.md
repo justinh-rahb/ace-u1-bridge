@@ -654,6 +654,9 @@ Recommended commit structure:
   - corrected the direct macros to use ACEPRO's required `INSTANCE=0 INDEX=<slot>` syntax instead of invalid bare `INDEX=<slot>`
   - added `ACE_BRIDGE_PUSH` and `ACE_BRIDGE_PULL` on main to send raw `ACE_FEED` / `ACE_RETRACT` commands to the ACE instance without invoking Snapmaker `AUTO_FEEDING`
   - these are intended as low-level bringup and calibration tools while coordinated load/unload timing is still being tuned
+  - removed the experimental per-lane tracked-position helpers from the bridge config after live testing showed the simpler direct controls were the only pieces actually helping
+  - retained `ACE_BRIDGE_ASSIST_PULSE` as a small convenience wrapper, but the main working toolchange flow is `RELEASE` / `GRAB` plus direct `PUSH` / `PULL`
+  - restored `ROUTER_ON_READY` in the shipped main router config so fresh images subscribe ACE event handlers without depending on stale persistent config
   - the ACE instance currently uses a simulated nozzle sensor (`virtual_pin:filament_nozzle_sim`), so it cannot observe real feeder arrival
   - `ace_feed_done` must not fire immediately after `ACE_FEED`; it is now delayed by estimated motion time so main-side `AUTO_FEEDING` starts after ACE transport has had time to reach the U1 feeder
   - `ROUTER_EVENT_SUBSCRIBE` registrations were using bare macro names, so router event context values never became G-code params
