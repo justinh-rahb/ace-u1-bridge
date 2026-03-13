@@ -673,6 +673,9 @@ Recommended commit structure:
     - `ACE_BRIDGE_LOAD_ASSIST` enables ACE assist and polls `filament_motion_sensor eN_filament`
     - on first toolhead-sensor trip it restores feeder auto
     - autoload is now optional via `AUTOLOAD=0|1` instead of always forcing `AUTO_FEEDING ... LOAD=1`
+  - main bridge macros now include a delayed tool monitor that watches `toolhead.extruder`
+    and automatically asserts `ACE_BRIDGE_GRAB` for the mapped lane whenever the
+    active built-in U1 tool changes or ACE reconnects
   - the ACE instance currently uses a simulated nozzle sensor (`virtual_pin:filament_nozzle_sim`), so it cannot observe real feeder arrival
   - `ace_feed_done` must not fire immediately after `ACE_FEED`; it is now delayed by estimated motion time so main-side `AUTO_FEEDING` starts after ACE transport has had time to reach the U1 feeder
   - `ROUTER_EVENT_SUBSCRIBE` registrations were using bare macro names, so router event context values never became G-code params
